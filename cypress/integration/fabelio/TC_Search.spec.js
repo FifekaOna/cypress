@@ -8,10 +8,17 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 
 describe('search',function(){
     it('search_product',function(){
-        cy.visit('https://fabelio.com')
-        cy.get('#search').type('cessi')
-        cy.get('#search').type('{enter}')
-
-        
+        cy.visit('https://qa.fabelio.com')
+        cy.get('input[placeholder="Cari produk"]').type('cessi')
+        cy.get('input[placeholder="Cari produk"]').type('{enter}')
+        cy.contains('Dining Chair').parent().within(()=>{
+            cy.get('a').click({ force: true })
+        }
+        )
+        const x= cy.get('button[id="buyNow"]').click({ force: true })
+        cy.screenshot();
     })
 })
+
+
+
