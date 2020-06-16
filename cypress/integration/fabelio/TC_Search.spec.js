@@ -1,6 +1,10 @@
 /// <reference types="cypress" />
 
-
+import Homepage from './PageObject/Homepage'
+import Homepage from './PageObject/Searchpage'
+import Homepage from './PageObject/Itempage'
+import Searchpage from './PageObject/Searchpage'
+import Itempage from './PageObject/Itempage'
 
 
 Cypress.on('uncaught:exception', (err, runnable) => {
@@ -23,25 +27,23 @@ describe('search',function(){
         var i=0
         while (this.data[i] != null){
             //visit page
-            cy.visit('https://qa.fabelio.com')
+            const hp= new Homepage()
+            hp.visit()
             // search in search box
-            cy.get('input[placeholder="Cari produk"]').type(this.data[i].search)
-            cy.get('input[placeholder="Cari produk"]').type('{enter}')
+            hp.searchItem(this.data[i].search)
 
+            const sp= new Searchpage()
             // click desired item based on criteria
             if (this.data[i].lookFor != null) {
-                cy.contains(this.data[i].lookFor).parent().within(()=>{
-                    cy.get('a').click({ force: true })
-                }
-                )
+                sp.searchItemInList(this.data[i].lookFor )
             }
+
+            const ip= new Itempage()
             // click buy 
-            cy.get('button[id="buyNow"]').click({ force: true })
+            ip.clickBuyButton()
             
             // wait for all XHR finished and check-out page appeared
-            cy.server()
-            cy.route('POST','/rest/default/V1/checkout-step').as('checkout')
-            cy.wait('@checkout', { timeout: 60000 })
+            ip.waitForCheckOutPage()
 
             // take screenshot
             cy.screenshot();
