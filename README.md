@@ -1,4 +1,4 @@
-9. Search product, product name dynamic by read data from CSV, provide screenshot at the end of test.
+
 
 How to run :
 - first time run
